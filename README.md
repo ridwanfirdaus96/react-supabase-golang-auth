@@ -1,96 +1,158 @@
-[![CodeGuide](/codeguide-backdrop.svg)](https://codeguide.dev)
+# Golang + React Authentication System
 
-# CodeGuide Vite + Supabase Starter
+A complete user authentication system built with Golang backend and React frontend, featuring JWT tokens, PostgreSQL database, and modern UI components.
 
-A modern web application starter template built with Vite and React, featuring a beautiful UI and Supabase integration.
+## 🏗️ Architecture
 
-## Tech Stack
+### Backend (Golang)
+- **Framework**: Gin HTTP framework
+- **Database**: PostgreSQL with pgx driver
+- **Authentication**: JWT tokens with httpOnly cookies
+- **Password Hashing**: bcrypt
+- **Session Management**: In-memory session tracking with refresh tokens
 
-- **Framework:** [Vite](https://vitejs.dev/) + [React](https://react.dev/)
-- **Database:** [Supabase](https://supabase.com/)
-- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
-- **UI Components:** [shadcn/ui](https://ui.shadcn.com/)
-- **Data Management:** [TanStack Query](https://tanstack.com/query)
-- **Form Handling:** [React Hook Form](https://react-hook-form.com/)
-- **Animations:** [Framer Motion](https://www.framer.com/motion/)
-- **Validation:** [Zod](https://zod.dev/)
+### Frontend (React + TypeScript)
+- **UI**: shadcn/ui components with Tailwind CSS
+- **State Management**: TanStack Query (React Query)
+- **Routing**: React Router v6
+- **Forms**: React Hook Form with Zod validation
+- **Type Safety**: Full TypeScript implementation
 
-## Prerequisites
+## 🚀 Quick Start
 
-Before you begin, ensure you have the following:
+### Prerequisites
+- Node.js 18+ 
+- Go 1.21+
+- PostgreSQL (optional, defaults to in-memory for development)
 
-- Node.js 18+ installed
-- A [Supabase](https://supabase.com/) account for database
-- Generated project documents from [CodeGuide](https://codeguide.dev/) for best development experience
-
-## Getting Started
-
-1. **Clone the repository**
-
-   ```bash
-   git clone <repository-url>
-   cd codeguide-vite-supabase
-   ```
-
-2. **Install dependencies**
-
-   ```bash
-   npm install
-   # or
-   yarn install
-   # or
-   pnpm install
-   ```
-
-3. **Environment Variables Setup**
-
-   - Copy the `.env.example` file to `.env`:
-     ```bash
-     cp .env.example .env
-     ```
-   - Fill in the environment variables in `.env` (see Configuration section below)
-
-4. **Start the development server**
-
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   # or
-   pnpm dev
-   ```
-
-5. **Open [http://localhost:5173](http://localhost:5173) with your browser to see the result.**
-
-## Configuration
-
-### Supabase Setup
-
-1. Go to [Supabase Dashboard](https://app.supabase.com/)
-2. Create a new project
-3. Go to Project Settings > API
-4. Copy the `Project URL` as `VITE_SUPABASE_URL`
-5. Copy the `anon` public key as `VITE_SUPABASE_ANON_KEY`
-
-## Environment Variables
-
-Create a `.env` file in the root directory with the following variables:
-
-```env
-# Supabase
-VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+### 1. Clone and Setup
+```bash
+git clone <repository-url>
+cd react-supabase-golang-auth
 ```
 
-## Features
+### 2. Start Development Servers
 
-- 📦 Supabase Database Integration
-- 🎨 Modern UI with Tailwind CSS and Radix UI
-- 🚀 Fast Development with Vite
-- 🔄 Data Fetching with TanStack Query
-- 📱 Responsive Design
-- 🎭 Beautiful Animations with Framer Motion
-- 📝 Type-Safe Forms with React Hook Form and Zod
+#### Option A: Using the development script
+```bash
+./dev.sh
+```
+
+#### Option B: Manual setup
+
+**Backend:**
+```bash
+cd backend
+export PATH=$PATH:/workspace/repo/go/bin
+export GOROOT=/workspace/repo/go
+go run .
+```
+
+**Frontend:**
+```bash
+npm install
+npm run dev
+```
+
+### 3. Access the Applications
+- **Frontend**: http://localhost:5173
+- **Backend API**: http://localhost:8080
+
+## 📁 Project Structure
+
+```
+├── backend/                    # Go backend application
+│   ├── main.go                # Main server file
+│   ├── auth.go                # JWT and authentication logic
+│   ├── database.go            # PostgreSQL database operations
+│   ├── session.go             # Session management
+│   ├── .env                   # Environment variables
+│   ├── go.mod                 # Go module file
+│   └── migrations/            # Database migrations
+├── src/                       # React frontend
+│   ├── components/
+│   │   ├── auth/              # Authentication components
+│   │   └── ui/                # shadcn/ui components
+│   ├── contexts/              # React contexts
+│   ├── hooks/                 # Custom React hooks
+│   ├── services/              # API client services
+│   └── utils/                 # Utility functions
+├── .env                       # Frontend environment variables
+└── dev.sh                     # Development startup script
+```
+
+## 🔐 Authentication Features
+
+### Backend Endpoints
+- `POST /api/register` - User registration
+- `POST /api/login` - User login  
+- `POST /api/logout` - User logout
+- `GET /api/user` - Get current user profile
+- `POST /api/refresh` - Refresh JWT token
+
+### Security Features
+- ✅ JWT tokens with httpOnly cookies
+- ✅ Automatic token refresh
+- ✅ Session management and tracking
+- ✅ Secure password hashing with bcrypt
+- ✅ CORS configuration
+- ✅ Input validation and sanitization
+- ✅ Environment-based security settings
+
+### Frontend Features
+- ✅ React Hook Form with Zod validation
+- ✅ TanStack Query for caching and state management
+- ✅ Protected routes and authentication guards
+- ✅ Automatic token refresh handling
+- ✅ User-friendly error messages
+- ✅ Loading states and skeletons
+- ✅ Responsive design with Tailwind CSS
+
+## 🛠️ Configuration
+
+### Backend Environment (.env)
+```env
+PORT=8080
+ENVIRONMENT=development
+JWT_SECRET=your-secret-key-change-this-in-production
+DATABASE_URL=postgres://user:password@localhost:5432/authdb
+```
+
+### Frontend Environment (.env)
+```env
+VITE_API_BASE_URL=http://localhost:8080
+VITE_ENVIRONMENT=development
+```
+
+## 📊 Database Schema
+
+```sql
+CREATE TABLE users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX idx_users_email ON users(email);
+```
+
+## 🔄 Development Workflow
+
+1. **Backend Development**: 
+   - Run `go run .` in the `backend/` directory
+   - Test endpoints with curl or Postman
+   - Check browser developer tools for cookies
+
+2. **Frontend Development**:
+   - Run `npm run dev` in the root directory
+   - Access http://localhost:5173
+   - Login/Register forms will work with the backend
+
+3. **Both Servers**:
+   - Use `./dev.sh` to start both servers simultaneously
+   - Frontend will automatically proxy API requests to backend
 
 ## Project Structure
 
